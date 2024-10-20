@@ -9,15 +9,16 @@ from .player import Player
 class Screen:
 	"""Wrapper for pygame window
 	"""
-    def __init__(self):
-        self.window = pygame.display.set_mode((WIDTH, HEIGHT))
-        self.layer0 = pygame.Surface((WIDTH, HEIGHT))
 
-    def refresh(self):
-    	self.layer0.fill(BLACK)
+	def __init__(self):
+		self.window = pygame.display.set_mode((WIDTH, HEIGHT))
+		self.layer0 = pygame.Surface((WIDTH, HEIGHT))
 
-    def render(self):
-    	self.window.blit(self.layer0, (0,0))
+	def refresh(self):
+		self.layer0.fill(BLACK)
+
+	def render(self):
+		self.window.blit(self.layer0, (0,0))
 
 class Game:
 	def __init__(self, flags: list = []):

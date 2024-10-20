@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
 		self.body = pymunk.Body(100, 2)
 		self.body.position = (400, 400)
 		self.body.friction = 99
-		self.shape = pymunk.Circle(self.body, 30, (0, 0))
+		self.shape = pymunk.Circle(self.body, 7.5, (0, 0))
 
 		self.game.world.add(self)
 
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
 
 	def update(self) -> None:
 		self.move()
-
-	def draw(self, win: Pygame.Surface):
+		
+	def draw(self, win: pygame.Surface):
 		x, y = self.body.position
-		pygame.draw.rect(win, settings.WHITE, (x, y, 15, 15))
+		pygame.draw.rect(win, settings.WHITE, (x-7.5, y-7.5, 15, 15))
