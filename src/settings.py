@@ -2,8 +2,9 @@ import pygame
 
 WIDTH, HEIGHT = 800, 600
 COLLTYPE_BALL = 2
-FPS = 30
+FPS = 60
 FIXED_DT = 1/FPS
+
 def flipy(y_value):
 	return HEIGHT - y_value
 

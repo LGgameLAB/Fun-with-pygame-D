@@ -4,12 +4,12 @@ import src.settings as settings
 class Player(pygame.sprite.Sprite):
 
 	# movement speed and dampening rate
-	speed = 100
-	damp = 0.8
+	speed = 220
+	damp = 0.97
 
 	def __init__(self, game):
 		self.game = game
-		super().__init__((game.sprites))
+		super().__init__((game.sprites, game.screen.spritelayer))
 
 		self.init_physics()
 
@@ -52,6 +52,10 @@ class Player(pygame.sprite.Sprite):
 	def update(self) -> None:
 		self.move()
 		
-	def draw(self, win: pygame.Surface):
+	def draw(self, win: pygame.Surface, transform = None):
 		x, y = self.body.position
-		pygame.draw.rect(win, settings.WHITE, (x-7.5, y-7.5, 15, 15))
+		if not transform:
+			pygame.draw.rect(win, settings.WHITE, (x-7.5, y-7.5, 15, 15))
+		else: 
+			x, y = transform(self.body.position)
+			pygame.draw.rect(win, settings.WHITE, (x-7.5, y-7.5, 15, 15))

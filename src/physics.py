@@ -9,12 +9,12 @@ class World:
 		self.game = game
 		self.space = pymunk.Space()
 		self.space.gravity = 0.0, 0.0
-		self.options = pymunk.pygame_util.DrawOptions(game.screen.layer0)
+		self.options = pymunk.pygame_util.DrawOptions(game.screen.base)
 
 		# Makes a bunch of balls for funsies
-		# for x in range(99):
-		# 	self.space.add(*self.ball((10*x, 10*x)))
-		# self.space.bodies[0].apply_impulse_at_local_point((999, 999), (0, 0))
+		for x in range(99):
+			self.space.add(*self.ball((10*x, 10*x)))
+		self.space.bodies[0].apply_impulse_at_local_point((999, 999), (0, 0))
 
 	def ball(self, p = (20, 20)):
 		body = pymunk.Body(100, 100)
@@ -30,7 +30,8 @@ class World:
 	
 	def render(self):
 		self.space.debug_draw(self.options)
-		pass
 
 	def update(self):
+		# print(self.game.clock.get_time())
+		# print(FIXED_DT)
 		self.space.step(FIXED_DT)

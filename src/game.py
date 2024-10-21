@@ -10,22 +10,27 @@ class Screen:
 	"""Wrapper for pygame window
 	"""
 
-	def __init__(self):
+	def __init__(self, game):
+		self.game = game
 		self.window = pygame.display.set_mode((WIDTH, HEIGHT))
-		self.layer0 = pygame.Surface((WIDTH, HEIGHT))
+		self.base = pygame.Surface((WIDTH, HEIGHT)).convert()
+		self.spritelayer = pygame.sprite.Group()
 
 	def refresh(self):
-		self.layer0.fill(BLACK)
+		self.base.fill(BLACK)
 
 	def render(self):
-		self.window.blit(self.layer0, (0,0))
+		for sprite in self.spritelayer:
+			sprite.draw(self.base)
+		self.window.blit(self.base, (0,0))
+		pygame.display.set_caption(str(round(self.game.clock.get_fps())))
 
 class Game:
 	def __init__(self, flags: list = []):
 		self.clock = pygame.time.Clock()
 		self.sprites = pygame.sprite.Group()
 		self.entities = []
-		self.screen = Screen()
+		self.screen = Screen(self)
 		self.world = World(self)
 		self.player = Player(self)
 
@@ -35,9 +40,7 @@ class Game:
 			self.get_events()
 			self.update()
 			self.render()
-			self.clock.tick(60)
-
-
+			self.clock.tick(FPS)
 
 	def update(self):
 		self.world.update()
@@ -46,9 +49,6 @@ class Game:
 	def render(self):
 		self.screen.refresh()
 		self.world.render()
-		for sprite in self.sprites:
-			sprite.draw(self.screen.layer0)
-
 		self.screen.render()
 		pygame.display.update()
 
