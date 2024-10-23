@@ -4,7 +4,7 @@ import random
 
 pygame.init()
 
-win = pygame.display.set_mode((300, 300))
+win = pygame.display.set_mode((500, 500))
 clock = pygame.time.Clock()
 
 particles = []
@@ -34,6 +34,7 @@ while True:
     clock.tick(60)
     win.fill((0,0,0))
 
+    pygame.draw.rect(win, (0, 100, 100), (20, 20, 100, 50))
     for x in range(10):
         add_particle(*pygame.mouse.get_pos(), 10, (random.random()-0.5)*3, -(random.random())*5)
     for p in particles:
@@ -50,6 +51,6 @@ while True:
             pygame.quit()
             sys.exit()
             
-    pygame.display.set_caption("FPS: " + str(clock.get_fps()) + " | particles: " + str(len(particles)))
+    pygame.display.set_caption("FPS: " + str(round(clock.get_fps(), 3)) + " | particles: " + str(len(particles)))
     pygame.display.flip()
 

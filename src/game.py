@@ -9,7 +9,7 @@ from .player import Player
 class Screen:
 	"""Wrapper for pygame window
 	"""
-
+#sdf
 	def __init__(self, game):
 		self.game = game
 		self.window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -26,6 +26,8 @@ class Screen:
 		pygame.display.set_caption(str(round(self.game.clock.get_fps())))
 
 class Game:
+	"""Game controller
+	"""
 	def __init__(self, flags: list = []):
 		self.clock = pygame.time.Clock()
 		self.sprites = pygame.sprite.Group()
