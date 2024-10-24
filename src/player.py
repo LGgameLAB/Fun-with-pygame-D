@@ -1,5 +1,6 @@
 import pygame, pymunk
 import src.settings as settings
+import src.fx as fx
 
 class Player(pygame.sprite.Sprite):
 
@@ -12,6 +13,10 @@ class Player(pygame.sprite.Sprite):
 		super().__init__((game.sprites, game.screen.spritelayer))
 
 		self.init_physics()
+
+		self.particles = fx.GlowParticles(game)
+		game.screen.spritelayer.add(self.particles)
+
 
 	def init_physics(self) -> None:
 		"""Loads the pymunk information for the player"""
@@ -51,6 +56,8 @@ class Player(pygame.sprite.Sprite):
 
 	def update(self) -> None:
 		self.move()
+		self.particles.update_position(pygame.mouse.get_pos())
+
 		
 	def draw(self, win: pygame.Surface, transform = None):
 		x, y = self.body.position

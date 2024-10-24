@@ -1,1 +1,1 @@
-from particles import *
+from .particles import *

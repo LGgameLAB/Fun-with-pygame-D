@@ -14,6 +14,10 @@ keySet = {
 	"left": pygame.K_LEFT,
 	"right": pygame.K_RIGHT
 }
+
+def now():
+    return pygame.time.get_ticks()
+
 def checkKey(move):
     '''Handy Dandy class for checking the status of keys given a 
     a) keyword for the built in mapped buttons

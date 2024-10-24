@@ -18,13 +18,13 @@ class ParticleController(pygame.sprite.Sprite):
     """
 
     batch_size = 0
-    lifespan = 100
+    lifespan = 100000
 
-    def __init___(self, game):
+    def __init__(self, game):
         self.game = game
-        super().__init__((game.sprites))
+        pygame.sprite.Sprite.__init__(self, (game.sprites))
 
-        particles = []
+        self.particles = []
         self.start_time = now()
 
     def update(self):
@@ -70,16 +70,23 @@ class GlowParticles(ParticleController):
             p[0] += p[3] # Add Velocity X
             p[4] += 0.3  # Add acceleration
             if p[1] >= HEIGHT:
-                particles.remove(p)
+                self.particles.remove(p)
+    @staticmethod
+    def glow_surface(radius, color):
+        surf = pygame.Surface((int(radius*2), int(radius*2)))
+        pygame.draw.circle(surf, color, (radius, radius),radius)
+        surf.set_colorkey((0,0,0))
+
+        return surf
     
     def draw(self, surf, transform = lambda x: x):
-        for p in particles:
+        for p in self.particles:
             pygame.draw.circle(surf, self.color, (p[0], p[1]), p[2])
             
             # Glow Effect
             r = p[2]*2
             
-            win.blit(particle_surface( 
+            surf.blit(self.glow_surface( 
                         r, 
                         (self.glow_brightness, self.glow_brightness, self.glow_brightness) 
                      ),
