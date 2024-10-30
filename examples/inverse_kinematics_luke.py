@@ -47,13 +47,15 @@ def inverse_kinematics():
     angle_1 = (p2-p1).angle_to(target-p1)
     p1_predicted = p1 + (p2-p1).rotate(angle_1)
     angle_1 = pygame.math.clamp(angle_1, -1*speed, speed)
+    angles[1] += angle_1
 
     angle_2 = (p1_predicted-p0).angle_to(target-p0)
     angle_2 = pygame.math.clamp(angle_2, -1*speed, speed)
+    angles[0] += angle_2
 
-    cumulative_angle = angle_2
+    cumulative_angle = angles[0]
     points[1] = p0 + rel_vectors[0].rotate(cumulative_angle)
-    cumulative_angle += angle_1
+    cumulative_angle += angles[1]
     points[2] = p1 + rel_vectors[1].rotate(cumulative_angle)
 
 while 1:
