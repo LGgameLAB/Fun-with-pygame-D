@@ -45,4 +45,5 @@ def checkKey(move):
     return False
 
 WHITE = (255,255,255)
+GREEN = (5, 120, 5)
 BLACK = (0,0,0)

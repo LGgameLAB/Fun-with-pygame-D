@@ -12,9 +12,16 @@ class World:
 		self.options = pymunk.pygame_util.DrawOptions(game.screen.base)
 
 		# Makes a bunch of balls for funsies
-		for x in range(99):
+		for x in range(3):
 			self.space.add(*self.ball((10*x, 10*x)))
 		self.space.bodies[0].apply_impulse_at_local_point((999, 999), (0, 0))
+
+		# Testing out a segment
+		body = pymunk.Body(100, 100)
+		segment = pymunk.Segment(body, (0, -10), (0, 10), 2)
+		self.add((body, segment))
+		body.position = (100,100)
+
 
 	def ball(self, p = (20, 20)):
 		body = pymunk.Body(100, 100)
@@ -27,6 +34,8 @@ class World:
 	def add(self, entity):
 		if isinstance(entity, pygame.sprite.Sprite):
 			self.space.add(entity.body, entity.shape)
+		else:
+			self.space.add(entity[0], entity[1])
 	
 	def render(self):
 		self.space.debug_draw(self.options)

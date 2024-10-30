@@ -1,6 +1,7 @@
 import pygame, pymunk
 import src.settings as settings
 import src.fx as fx
+from src.sprites import Spider
 
 class Player(pygame.sprite.Sprite):
 
@@ -14,9 +15,10 @@ class Player(pygame.sprite.Sprite):
 
 		self.init_physics()
 
-		self.particles = fx.GlowParticles(game)
-		game.screen.spritelayer.add(self.particles)
+		# self.particles = fx.GlowParticles(game)
+		# game.screen.spritelayer.add(self.particles)
 
+		self.pet = Spider(game)
 
 	def init_physics(self) -> None:
 		"""Loads the pymunk information for the player"""
@@ -56,13 +58,13 @@ class Player(pygame.sprite.Sprite):
 
 	def update(self) -> None:
 		self.move()
-		self.particles.update_position(pygame.mouse.get_pos())
+		#self.particles.update_position(self.body.position)#pygame.mouse.get_pos())
 
 		
 	def draw(self, win: pygame.Surface, transform = None):
 		x, y = self.body.position
 		if not transform:
-			pygame.draw.rect(win, settings.WHITE, (x-7.5, y-7.5, 15, 15))
+			pygame.draw.rect(win, settings.GREEN, (x-7.5, y-7.5, 15, 15))
 		else: 
 			x, y = transform(self.body.position)
 			pygame.draw.rect(win, settings.WHITE, (x-7.5, y-7.5, 15, 15))
