@@ -49,7 +49,7 @@ def inverse_kinematics():
     angle_1 = pygame.math.clamp(angle_1, -1*speed, speed)
     angles[1] += angle_1
 
-    angle_2 = (p1_predicted-p0).angle_to(target-p0)
+    angle_2 = (p1_predicted-p0).angle_to(target-p0) 
     angle_2 = pygame.math.clamp(angle_2, -1*speed, speed)
     angles[0] += angle_2
 

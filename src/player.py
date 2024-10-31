@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
 	def init_physics(self) -> None:
 		"""Loads the pymunk information for the player"""
 
-		self.body = pymunk.Body(100, 2)
+		self.body = pymunk.Body(10, 2)
 		self.body.position = (400, 400)
 		self.body.friction = 99
 		self.shape = pymunk.Circle(self.body, 7.5, (0, 0))

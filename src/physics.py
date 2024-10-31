@@ -12,9 +12,9 @@ class World:
 		self.options = pymunk.pygame_util.DrawOptions(game.screen.base)
 
 		# Makes a bunch of balls for funsies
-		for x in range(3):
-			self.space.add(*self.ball((10*x, 10*x)))
-		self.space.bodies[0].apply_impulse_at_local_point((999, 999), (0, 0))
+		# for x in range(3):
+		# 	self.space.add(*self.ball((10*x, 10*x)))
+		# self.space.bodies[0].apply_impulse_at_local_point((999, 999), (0, 0))
 
 		# Testing out a segment
 		body = pymunk.Body(100, 100)

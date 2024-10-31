@@ -8,7 +8,7 @@ pygame.init()
 size = width, height = 640, 480
 screen = pygame.display.set_mode(size)
 
-points = list(map(Vector2, [(100, 100), (200, 100), (300, 100)]))
+points = list(map(Vector2, [(100, 100), (200, 100), (300, 100), (400, 100), (500, 100)]))
 target = Vector2(450, 300)
 target_speed = Vector2(3, 3)
 
