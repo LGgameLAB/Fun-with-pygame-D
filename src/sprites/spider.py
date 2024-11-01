@@ -10,7 +10,7 @@ class Spider(pygame.sprite.Sprite):
     def __init__(self, game):
         super().__init__((game.sprites, game.screen.spritelayer))
 
-        self.body = pymunk.Body(350000, 20000)
+        self.body = pymunk.Body(3500, 200000)
         torso = [
             (10, 20),
             (-10, 20),
@@ -21,6 +21,7 @@ class Spider(pygame.sprite.Sprite):
 
         self.leg_mounts = [0 for i in range(4)]
         self.feet = [0 for i in range(4)]
+        self.legs = [Leg((0,0), (40,0)) for i in range(4)]
         
         self.body.position = (400, 200)
         game.world.add((self.body, self.torso))
@@ -28,26 +29,36 @@ class Spider(pygame.sprite.Sprite):
     def update(self):
         i=0
         for x in range(-20, 21, 40):
-            for y in range(-30, 31, 60):
+            for y in range(-20, 21, 40):
                 pos = Vec(x, y).rotate_rad(self.body.angle)
-                self.leg_mounts
-                self.feet[i] = pos + self.body.position
+                self.leg_mounts[i] = pos + self.body.position
+                self.feet[i] = pos*2 + self.body.position
+                self.legs[i].update(self.leg_mounts[i], self.feet[i])
                 i+=1
+        
+        self.body.position = pygame.mouse.get_pos()
+        
+
 
     def draw(self, surf, transform=None):
         for f in self.feet:
             pygame.draw.circle(surf, WHITE, f, 3)
+        
+        for l in self.legs:
+            l.draw(surf, transform)
 
-class leg:
+class Leg:
     """A spider leg driven by inverse kinematics
     """
 
     def __init__(self, start, end):
-        self.points = [Vec(p) for p in [start, pytweening.getLinePoint(*start, *end, 0.75), pytweening.getLinePoint(*start, *end, 1.5)] ]
+        self.points = [Vec(p) for p in [start, pytweening.getPointOnLine(*start, *end, 0.75), pytweening.getPointOnLine(*start, *end, 1.5)] ]
         self.angles = [0, 0]
         self.rel_vectors = [self.points[i]-self.points[i-1] for i in range(1, len(self.points))]
         
-        self.speed = 50
+        self.speed = 5
+        self.range = 30
+        self.start = Vec(0, 0)
         self.target = Vec(0, 0)
         self.return_mode = False
 
@@ -77,9 +88,19 @@ class leg:
         if self.points[2].distance_to(target) < 1:
             self.return_mode = False
 
-    def update(self, target):
+    def update(self, start, target):
+        self.points[0] += start-self.start
+        self.start = start
+
+        self.inverse_kinematics()
         if self.points[2].distance_to(target) > self.range:
             self.return_mode = True
         
         if self.return_mode:
-            self.inverse_kinematics
+            self.target = target
+    
+    def draw(self, surf, transform=None):
+        for i in range(1, len(self.points)):
+            prev = self.points[i-1]
+            cur = self.points[i]
+            pygame.draw.aaline(surf, WHITE, prev, cur)
