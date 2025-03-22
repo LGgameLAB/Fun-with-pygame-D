@@ -21,7 +21,10 @@ class Spider(pygame.sprite.Sprite):
 
         self.leg_mounts = [0 for i in range(4)]
         self.feet = [0 for i in range(4)]
-        self.legs = [Leg((0,0), (40,0)) for i in range(4)]
+        self.legs = [Leg((0,0), (35,0)) for i in range(4)]
+        self.legs[2].fix_angles()
+        self.legs[3].fix_angles()
+        print("angles fixed")
         
         self.body.position = (400, 200)
         game.world.add((self.body, self.torso))
@@ -36,7 +39,7 @@ class Spider(pygame.sprite.Sprite):
                 self.legs[i].update(self.leg_mounts[i], self.feet[i])
                 i+=1
         
-        self.body.position = pygame.mouse.get_pos()
+        self.body.position = (150, self.body.position[1]+0.3)#pygame.mouse.get_pos()
         
 
 
@@ -56,11 +59,11 @@ class Leg:
         self.angles = [0, 0]
         self.rel_vectors = [self.points[i]-self.points[i-1] for i in range(1, len(self.points))]
         
-        self.speed = 5
+        self.speed = 3
         self.range = 30
         self.start = Vec(0, 0)
         self.target = Vec(0, 0)
-        self.return_mode = False
+        self.return_mode = True
 
     def inverse_kinematics(self):
         target = self.target
@@ -88,13 +91,19 @@ class Leg:
         if self.points[2].distance_to(target) < 1:
             self.return_mode = False
 
+    def fix_angles(self):
+        for i in range(len(self.angles)):
+            self.angles[i] += 3.141592
+
     def update(self, start, target):
-        self.points[0] += start-self.start
+        for p in self.points:
+            p += start-self.start
         self.start = start
 
-        self.inverse_kinematics()
-        if self.points[2].distance_to(target) > self.range:
-            self.return_mode = True
+        # self.inverse_kinematics()
+        # if self.points[2].distance_to(target) > self.range:
+        #     self.return_mode = True
+        # fabrik(self.points, target)
         
         if self.return_mode:
             self.target = target
@@ -104,3 +113,46 @@ class Leg:
             prev = self.points[i-1]
             cur = self.points[i]
             pygame.draw.aaline(surf, WHITE, prev, cur)
+
+# http://www.andreasaristidou.com/publications/papers/FABRIK.pdf
+def fabrik(positions, target):
+    tolerance = 2
+    last = len(positions)-1
+
+    distances = []
+    for i in range(len(positions)-1):
+        distances.append(positions[i+1].distance_to(positions[i]))
+    
+    # See if the target is reachable
+    if positions[0].distance_to(target) > sum(distances):
+        for i in range(len(positions)-1):
+            # Distance between each join and target
+            r_i = target.distance_to(positions[i])
+            delta = distances[i]/r_i
+            # Find new join positions
+            positions[i+1] = (1-delta)*positions[i] + delta*target
+    else:
+        # Reachable target
+        b = positions[0].copy()
+        
+        dist = positions[last].distance_to(target)
+        while dist > tolerance:
+            positions[last] = target
+            for i in range(last):
+                j = last - i - 1
+                r_j = positions[j+1].distance_to(positions[j])
+
+                delta = distances[j]/min(r_j, 0.001)
+                positions[j+1] = (1-delta)*positions[j+1] + delta*positions[j]
+
+            positions[0] = b
+            for i in range(last):
+                r_i = positions[i+1].distance_to(positions[i])
+
+                delta = distances[i]/min(r_i, 0.001)
+                positions[i+1] = (1-delta)*positions[i] + delta*positions[i+1]
+            
+
+            dist = positions[last].distance_to(target)
+
+
