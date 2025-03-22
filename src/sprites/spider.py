@@ -22,8 +22,6 @@ class Spider(pygame.sprite.Sprite):
         self.leg_mounts = [0 for i in range(4)]
         self.feet = [0 for i in range(4)]
         self.legs = [Leg((0,0), (35,0)) for i in range(4)]
-        self.legs[2].fix_angles()
-        self.legs[3].fix_angles()
         print("angles fixed")
         
         self.body.position = (400, 200)
@@ -103,7 +101,7 @@ class Leg:
         # self.inverse_kinematics()
         # if self.points[2].distance_to(target) > self.range:
         #     self.return_mode = True
-        # fabrik(self.points, target)
+        #fabrik(self.points, target)
         
         if self.return_mode:
             self.target = target
@@ -114,9 +112,24 @@ class Leg:
             cur = self.points[i]
             pygame.draw.aaline(surf, WHITE, prev, cur)
 
+
+class Bioarm(pygame.sprite.Sprite):
+    def __init__(self, game):
+        super().__init__([game.sprites, game.screen.spritelayer])
+
+        self.points = [Vec(100, 100), Vec(120, 100), Vec(140, 100)]
+    
+    def update(self):
+        fabrik(self.points, Vec(pygame.mouse.get_pos()))
+    
+    def draw(self, surf, transform=None):
+        for f in self.points:
+            pygame.draw.circle(surf, WHITE, f, 3)
+
+
 # http://www.andreasaristidou.com/publications/papers/FABRIK.pdf
 def fabrik(positions, target):
-    tolerance = 2
+    tolerance = 5
     last = len(positions)-1
 
     distances = []
@@ -125,6 +138,7 @@ def fabrik(positions, target):
     
     # See if the target is reachable
     if positions[0].distance_to(target) > sum(distances):
+        print("target not reachable")
         for i in range(len(positions)-1):
             # Distance between each join and target
             r_i = target.distance_to(positions[i])
@@ -132,10 +146,15 @@ def fabrik(positions, target):
             # Find new join positions
             positions[i+1] = (1-delta)*positions[i] + delta*target
     else:
+        print("yay")
         # Reachable target
         b = positions[0].copy()
         
         dist = positions[last].distance_to(target)
+        print(dist)
+        print(distances)
+        print(positions)
+        print(target)
         while dist > tolerance:
             positions[last] = target
             for i in range(last):

@@ -1,0 +1,11 @@
+[project]
+name = "fun-with-pygame-d"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "pygame>=2.6.1",
+    "pymunk>=6.11.1",
+    "pytweening>=1.2.0",
+]

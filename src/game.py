@@ -37,7 +37,7 @@ class Game:
         self.world = World(self)
         self.player = Player(self)
         chain = sprites.Chain(self)
-
+        bioarm = sprites.Bioarm(self)
     def main(self):
         self.active = True
         while self.active:
