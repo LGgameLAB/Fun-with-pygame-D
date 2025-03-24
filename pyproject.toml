@@ -8,4 +8,5 @@ dependencies = [
     "pygame>=2.6.1",
     "pymunk>=6.11.1",
     "pytweening>=1.2.0",
+    "shapely>=2.0.7",
 ]

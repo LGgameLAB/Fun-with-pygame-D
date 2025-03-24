@@ -1,8 +1,6 @@
-import pygame, pymunk
-import pymunk.pygame_util
-import sys, os
+import pygame
+import sys
 from .settings import *
-from pymunk import Vec2d
 from .physics import World
 from .player import Player
 import src.sprites as sprites
@@ -10,7 +8,6 @@ import src.sprites as sprites
 class Screen:
     """Wrapper for pygame window
     """
-#sdf
     def __init__(self, game):
         self.game = game
         self.window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -36,8 +33,10 @@ class Game:
         self.screen = Screen(self)
         self.world = World(self)
         self.player = Player(self)
-        chain = sprites.Chain(self)
+        # chain = sprites.Chain(self)
         bioarm = sprites.Bioarm(self)
+        beetle = sprites.Beetle(self)
+
     def main(self):
         self.active = True
         while self.active:
