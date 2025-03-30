@@ -1,4 +1,5 @@
 import pygame, pymunk
+import sys
 import pytweening
 from pygame import Vector2 as Vec
 from src.settings import *
@@ -57,22 +58,31 @@ class Leg:
     """
 
     def __init__(self, start, end):
+
         self.points = [Vec(p) for p in [start, pytweening.getPointOnLine(*start, *end, 0.75), pytweening.getPointOnLine(*start, *end, 1.5)] ]
         self.speed = 2
-        self.range = 25
+        self.range = 22
         self.start = Vec(0, 0)
         self.target = Vec(0, 0)
         self.focus = Vec(150, -200)
         self.return_mode = True
+        self.phase = 0
         self.reset = True
+        self.color = WHITE
 
 
-    def update(self, start, target):
+    def update(self, start, target, phase = 0):
+        self.phase += 1
+
         if self.reset:
             fabrik(self.points, self.focus)
             self.target = target
+            self.phase = 0
             self.reset = False
             self.return_mode = False
+
+        if self.phase < phase:
+            self.target = target
 
         for p in self.points:
             p += start-self.start
@@ -91,7 +101,7 @@ class Leg:
         for i in range(1, len(self.points)):
             prev = self.points[i-1]
             cur = self.points[i]
-            pygame.draw.aaline(surf, WHITE, prev, cur)
+            pygame.draw.aaline(surf, self.color, prev, cur, 3)
 
 
 class Bioarm(pygame.sprite.Sprite):

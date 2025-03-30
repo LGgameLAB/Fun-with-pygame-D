@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         # self.particles = fx.GlowParticles(game)
         # game.screen.spritelayer.add(self.particles)
 
-        self.pet = Spider(game)
+        # self.pet = Spider(game)
 
     def init_physics(self) -> None:
         """Loads the pymunk information for the player"""

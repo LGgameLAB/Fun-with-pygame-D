@@ -4,7 +4,7 @@ from src.settings import *
 
 class Chain(pygame.sprite.Sprite):
     def __init__(self, game):
-        super().__init__((game.sprites, game.screen.spritelayer))
+        super().__init__((game.screen.spritelayer))
         self.game = game
         self.reset = True
         
@@ -33,7 +33,6 @@ class Chain(pygame.sprite.Sprite):
         self.pos = Vec(20, 20) # Head position
 
     def update(self):
-        self.pos = Vec(pygame.mouse.get_pos())
         self.update_chain()
 
 
